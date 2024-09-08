@@ -9,6 +9,7 @@ exports.userAuth = async(req,res,next)=>{
         if (!token && !googleAuthEmail)
             return res.status(401).send({ status: false, message: "TOKEN_NOT_FOUND" });
         let isUserExists
+        let decodedTokenData 
         if(authType == "google" && googleAuthEmail){
             isUserExists = await userModel.findOne({
                 isDeleted : false,
@@ -16,7 +17,7 @@ exports.userAuth = async(req,res,next)=>{
                 isGoogleUser : true
             })
         }else{
-            const decodedTokenData = jwt.verify(token, process.env.JWTPRIVATEKEY_USER)
+            decodedTokenData = jwt.verify(token, process.env.JWTPRIVATEKEY_USER)
             const {userId,email} = decodedTokenData || {}
             isUserExists = await userModel.findOne({
                 isDeleted : false,
