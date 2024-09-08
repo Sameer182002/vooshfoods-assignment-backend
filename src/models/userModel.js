@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
     isDeleted : {
         type : Boolean,
         default : false
+    },
+    isGoogleUser : {
+        type : Boolean,
+        default : false
     }
 },{timestamps:true})
 

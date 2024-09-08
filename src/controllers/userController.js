@@ -3,8 +3,8 @@ const userService = require("../services/userService")
 
 exports.createUser = async(req,res)=>{
     try{
-        const {firstName,lastName,email,password} = req.body || {}; 
-        if(!firstName || !lastName || !checkValidString(firstName) || !checkValidString(lastName)){
+        const {firstName,lastName,email,password,isGoogleUser=false} = req.body || {}; 
+        if(!firstName || (!isGoogleUser && !lastName) || !checkValidString(firstName) || (!isGoogleUser && !checkValidString(lastName))){
             return res.status(400).send({
                 status : false,
                 message : `Pls Enter valid first name and last name`
@@ -16,7 +16,7 @@ exports.createUser = async(req,res)=>{
                 message : `Pls Enter valid email`
             })
         }
-        if(!password){
+        if(!isGoogleUser && !password){
             return res.status(400).send({
                 status : false,
                 message : `Password is mandatory`

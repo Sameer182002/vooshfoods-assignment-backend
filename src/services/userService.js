@@ -2,7 +2,7 @@ const userModel = require("../models/userModel")
 const { securepw, comparePw } = require("../utils/validator")
 
 exports.createUser = async(bodyData)=>{
-    const {firstName,lastName,email,password} = bodyData || {}
+    const {firstName,lastName,email,password,isGoogleUser} = bodyData || {}
 
     const isUserExists = await userModel.findOne({
         isDeleted : false,
@@ -11,17 +11,24 @@ exports.createUser = async(bodyData)=>{
 
     if(isUserExists) {
         return {
-            status : false,
-            code : 400,
-            message :'Please click on Login to continue!!'
+            status : isGoogleUser ? true : false,
+            code : isGoogleUser ? 200 : 400,
+           ...(!isGoogleUser && { message :'Please click on Login to continue!!'})
         }
     }
-
-    const hashedPw = await securepw(password)
+    let hashedPw
+    if(!isGoogleUser){
+        hashedPw = await securepw(password)
+    }
 
     const user = await userModel.create({
-        firstName,lastName,email,password: hashedPw
+        firstName,
+        ...(!isGoogleUser && {lastName}),
+        email,
+        ...(!isGoogleUser && {password: hashedPw}),
+        isGoogleUser: isGoogleUser
     })
+
     const token = await user.generateToken()
 
     return {

@@ -16,7 +16,7 @@ exports.createTask = async(bodyData,userData)=>{
     }
 }
 
-exports.getAllTasks = async(userData,query)=>{
+exports.getAllTasks = async(userData,query,sortBy)=>{
     const {userId} = userData || {}
     const tasks = await taskModel.find({
         isDeleted : false,
@@ -29,6 +29,9 @@ exports.getAllTasks = async(userData,query)=>{
                 description: { $regex: query, $options: 'i' } 
               }
         ]})
+    }).sort({
+        createdAt : sortBy == 'ascending' ? 1 : -1
+        
     })
 
     const pending = []

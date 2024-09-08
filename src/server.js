@@ -7,13 +7,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(multer().any())
 app.use(cors())
 
-app.listen(3001,(err)=>{
-    if(err){
-        console.log('Error while running')
-        return
-    }
-    console.log('Server is listening on port 3000')
-})
+// app.use("/",(req,res)=> res.status(200).send("Server is running"))
+// app.listen(3001,(err)=>{
+//     if(err){
+//         console.log('Error while running')
+//         return
+//     }
+//     console.log('Server is listening on port 3001')
+// })
 
 module.exports = {
     app

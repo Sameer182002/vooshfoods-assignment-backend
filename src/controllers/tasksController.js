@@ -19,8 +19,8 @@ exports.createTask = async(req,res)=>{
 
 exports.getAllTask = async(req,res)=>{
     try{
-        const {search = ''} = req.query || {}
-        const {status,data,code,message} = await taskService.getAllTasks(req.user,search)
+        const {search = '',sortBy=''} = req.query || {}
+        const {status,data,code,message} = await taskService.getAllTasks(req.user,search,sortBy)
         return res.status(code ||200).send({
             status,
             ...(message && {message}),
